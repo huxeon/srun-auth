@@ -2,10 +2,9 @@ use std::env;
 
 use srun_auth::client::Client;
 
-#[tokio::main]
-async fn main() -> anyhow::Result<()> {
+fn main() -> Result<(), ureq::Error> {
     let op = env::args().nth(1);
-    let client = Client::new().await?;
+    let client = Client::new()?;
 
     match op.as_deref() {
         Some("login") => {
@@ -13,14 +12,14 @@ async fn main() -> anyhow::Result<()> {
             let password = env::args().nth(3).expect("Couldn't get password");
 
             if !client.is_loggined() {
-                client.login(&username, &password).await?;
+                client.login(&username, &password)?;
             }
         }
         Some("logout") => {
             let username = env::args().nth(2).expect("Couldn't get username");
 
             if client.is_loggined() {
-                client.logout(&username).await?;
+                client.logout(&username)?;
             }
         }
         _ => println!(
