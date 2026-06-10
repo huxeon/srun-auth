@@ -13,12 +13,12 @@ The SRUN portal uses a challenge-response authentication protocol with custom en
 │  rad_user_info  │────>│  get_challenge  │────>│  srun_portal    │
 │  (check status) │     │  (get token)    │     │  (login)        │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
-                              ↑
-                    acid extracted from bing.com
+                                                      ↑
+                                            acid extracted from bing.com
 ```
 
 **Step 1**: Check login status via `rad_user_info`
-- If `error == "ok"`, already authenticated (skip to step 4)
+- If `error == "ok"`, already authenticated — exit
 - Otherwise, proceed to step 2
 
 **Step 2**: Get ACID via `get_acid`
@@ -168,3 +168,9 @@ cargo build --release
 ```
 
 ACID is optional; if not provided, it will be fetched automatically from bing.com.
+
+## Behavior
+
+- **Success**: exits with code 0 with no output
+- **Already logged in**: exits immediately (no re-login)
+- **Failure**: error message printed to stderr, process exits with error
